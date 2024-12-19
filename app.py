@@ -164,8 +164,8 @@ def download_files(img_path):
 
 def main():
     delete_files()
-    st.write("#たぬきツール")
     st.markdown('# 画像を4分割するアプリ（for X）')
+    st.markdown('- たぬきがせっせと画像を4分割して上下に余白を付けます')
     file = st.file_uploader('画像をアップロードしてください.', type=['jpg', 'jpeg', 'png'])
     if file:
         st.markdown(f'{file.name} をアップロードしました.')
@@ -184,6 +184,9 @@ def main():
             os.remove(img_path)
 
             download_files(img_path)
-
+            
+    url = "https://www.streamlit.io"
+    st.write("Copyright © 2024 たたたぬき[link](%s)" % url)
+    st.write("#たぬきツール")
 if __name__ == '__main__':
     main()
