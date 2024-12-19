@@ -164,6 +164,7 @@ def download_files(img_path):
 
 def main():
     delete_files()
+    st.write("#たぬきツール")
     st.markdown('# 画像を4分割するアプリ（for X）')
     file = st.file_uploader('画像をアップロードしてください.', type=['jpg', 'jpeg', 'png'])
     if file:
