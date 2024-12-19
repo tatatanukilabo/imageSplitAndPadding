@@ -69,8 +69,6 @@ def imageSplitAndPadding(img, color, basename_without_ext):
     bottom_left.save(f"{IMG_PATH}/{basename_without_ext} (3)左下.png")
     bottom_right.save(f"{IMG_PATH}/{basename_without_ext} (4)右下.png")
 
-    print("画像を4分割して保存しました。")
-
 def crop_center(img):
     width, height = img.size
     original_ratio = width / height
@@ -90,8 +88,6 @@ def crop_center(img):
     right = (width + new_width) // 2
     bottom = (height + new_height) // 2
 
-    print("画像を中央で切り抜いて16:9に変換しました。")
-
     return img.crop((left, top, right, bottom))
 
 def add_padding_to_aspect_ratio(img, color):
@@ -108,9 +104,6 @@ def add_padding_to_aspect_ratio(img, color):
     else:
         # すでに16:9以上の比率ならそのまま
         result = img
-
-
-    print("元画像の縦幅を維持して16:9のアスペクト比に余白を追加しました。")
 
     return result
 
@@ -188,14 +181,6 @@ def main():
         if st.button("画像4分割実行"):
             do(img_path, color)
             os.remove(img_path)
-            #img = Image.open(f"{IMG_PATH}/{basename_without_ext} (1)左上.png")
-            #st.image(img)
-            #img = Image.open(f"{IMG_PATH}/{basename_without_ext} (2)右上.png")
-            #st.image(img)
-            #img = Image.open(f"{IMG_PATH}/{basename_without_ext} (3)左下.png")
-            #st.image(img)
-            #img = Image.open(f"{IMG_PATH}/{basename_without_ext} (4)右下.png")
-            #st.image(img)
 
             download_files(img_path)
 
