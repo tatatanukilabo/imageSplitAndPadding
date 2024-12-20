@@ -13,7 +13,6 @@ def delete_files():
         os.remove(f"./{IMG_PATH}/{filename}")
 
 def list_imgs():
-    # IMG_PATH 内の画像ファイルを列挙
     return [
         filename
         for filename in os.listdir(IMG_PATH)
@@ -21,7 +20,6 @@ def list_imgs():
     ]
 
 def list_zip():
-    # IMG_PATH 内の画像ファイルを列挙
     return [
         filename
         for filename in os.listdir(IMG_PATH)
@@ -29,20 +27,16 @@ def list_zip():
     ]
 
 def imageSplitAndPadding(img, color, basename_without_ext):
-    # 画像の幅と高さを取得
     width, height = img.size
 
-    # 4分割するための各部分の幅と高さ
     new_width = width // 2
     new_height = height // 2
 
-    # 4つの部分に分割
     top_left = img.crop((0, 0, new_width, new_height))
     top_right = img.crop((new_width, 0, width, new_height))
     bottom_left = img.crop((0, new_height, new_width, height))
     bottom_right = img.crop((new_width, new_height, width, height))
 
-    # 4つの画像の上下に余白をつける
     top_padding = height // 2
     bottom_padding = height // 2
     new_width = top_left.width
@@ -63,7 +57,6 @@ def imageSplitAndPadding(img, color, basename_without_ext):
     new_img.paste(bottom_right, (0, top_padding))
     bottom_right = new_img
 
-    # 分割した画像を保存
     top_left.save(f"{IMG_PATH}/{basename_without_ext} (1)左上.png")
     top_right.save(f"{IMG_PATH}/{basename_without_ext} (2)右上.png")
     bottom_left.save(f"{IMG_PATH}/{basename_without_ext} (3)左下.png")
@@ -75,11 +68,9 @@ def crop_center(img):
     target_ratio = 16 / 9
 
     if original_ratio > target_ratio:
-        # 幅が長い場合、中央部分を切り抜く
         new_width = int(height * target_ratio)
         new_height = height
     else:
-        # 高さが長い場合、中央部分を切り抜く
         new_width = width
         new_height = int(width / target_ratio)
 
@@ -96,13 +87,11 @@ def add_padding_to_aspect_ratio(img, color):
     target_ratio = 16 / 9
 
     if original_ratio < target_ratio:
-        # 16:9にするために幅を拡張する
         new_width = int(height * target_ratio)
         new_height = height
         result = Image.new("RGB", (new_width, new_height), color)
         result.paste(img, ((new_width - width) // 2, 0))
     else:
-        # すでに16:9以上の比率ならそのまま
         result = img
 
     return result
@@ -115,7 +104,6 @@ def is_aspect_ratio_16_9(img):
 
 
 def do(img_path, color):
-    # 画像を読み込む
     img = Image.open(img_path)
     basename_without_ext = os.path.splitext(os.path.basename(img_path))[0]
 
@@ -126,7 +114,6 @@ def do(img_path, color):
         img = add_padding_to_aspect_ratio(img, color)
 
     if flag_crop_center:
-        # 画像を中央で切り抜いて16:9に変換
         img = crop_center(img)
     if flag_add_padding_to_aspect_ratio:
         img = add_padding_to_aspect_ratio(img, color)
@@ -136,7 +123,6 @@ def do(img_path, color):
 
 def download_files(img_path):
     basename_without_ext = os.path.splitext(os.path.basename(img_path))[0]
-    # ダウンロードしたいファイルのリスト
     files = [
         f"{IMG_PATH}/{basename_without_ext} (1)左上.png",
         f"{IMG_PATH}/{basename_without_ext} (2)右上.png",
@@ -144,10 +130,8 @@ def download_files(img_path):
         f"{IMG_PATH}/{basename_without_ext} (4)右下.png"
         ]
 
-    # ZIPファイルのパス
     zip_path = f"{IMG_PATH}/{basename_without_ext}.zip"
 
-    # ZIPファイルを作成
     with zipfile.ZipFile(zip_path, 'w') as zipf:
         for file in files:
             zipf.write(file)
@@ -164,17 +148,15 @@ def download_files(img_path):
 
 def main():
     delete_files()
-    st.markdown('# 画像を4分割するアプリ（for X）')
+    st.markdown('# 画像を4分割するアプリ ver.0.0.1')
     st.markdown('- たぬきがせっせと画像を4分割して上下に余白を付けます')
     file = st.file_uploader('画像をアップロードしてください.', type=['jpg', 'jpeg', 'png'])
     if file:
         st.markdown(f'{file.name} をアップロードしました.')
         img_path = os.path.join(IMG_PATH, file.name)
-        # 画像を保存する
         with open(img_path, 'wb') as f:
             f.write(file.read())
 
-        # 保存した画像を表示
         #img = Image.open(img_path)
         #st.image(img)
 
@@ -187,5 +169,6 @@ def main():
             
     url = "https://x.com/ta_ta_ta_nu_ki"
     st.write("Copyright © 2024 [たたたぬき](%s) #たぬきツール" % url)
+
 if __name__ == '__main__':
     main()
